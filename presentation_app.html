@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Agentic Digitizer - PPIT Presentation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0F172A;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --neon-cyan: #00F2FF;
+            --neon-magenta: #FF00E5;
+            --text-main: #F8FAFC;
+            --text-sub: #94A3B8;
+            --border: rgba(51, 65, 85, 0.5);
+            --gradient: linear-gradient(135deg, var(--neon-cyan), var(--neon-magenta));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #presentation-container {
+            width: 90vw;
+            height: 85vh;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        /* Slide Content Styling */
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            color: var(--neon-cyan);
+            margin-bottom: 30px;
+            border-left: 6px solid var(--neon-magenta);
+            padding-left: 20px;
+        }
+
+        .content {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: var(--text-main);
+        }
+
+        ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        li::before {
+            content: "⚡";
+            position: absolute;
+            left: 0;
+            color: var(--neon-magenta);
+        }
+
+        .highlight {
+            color: var(--neon-cyan);
+            font-weight: 600;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--neon-cyan);
+            font-weight: 800;
+        }
+
+        /* Navigation Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 5vw;
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            left: 5vw;
+            color: var(--text-sub);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        /* Title Slide Special */
+        .title-slide {
+            text-align: center;
+        }
+
+        .title-slide h1 {
+            font-size: 5.5rem;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            color: var(--text-sub);
+            margin-bottom: 50px;
+            font-weight: 300;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+    <div class="slide-number" id="current-slide-num">01 / 32</div>
+
+    <div id="presentation-container">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <h1>NEON AGENTIC<br>DIGITIZER</h1>
+            <p class="tagline">From Static OCR to Autonomous Multi-Agent Digitization</p>
+            <div class="content">
+                <p>Course: <span class="highlight">Professional Practices in IT (PPIT)</span></p>
+                <p>Team Members: [Your Names]</p>
+                <p>Institution: [Your University]</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Phase 1 Recap -->
+        <div class="slide">
+            <h2>Phase 1 Recap: The Static Tool</h2>
+            <div class="content">
+                <ul>
+                    <li><span class="highlight">Problem:</span> Manual transcription is slow and error-prone.</li>
+                    <li><span class="highlight">Technology:</span> Python, PaddleOCR, and Tesseract.</li>
+                    <li><span class="highlight">Limitation:</span> It was a "dumb tool"—no intelligence or error
+                        detection.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Profession -->
+        <div class="slide">
+            <h2>Computing as a Formal Profession</h2>
+            <div class="content">
+                <p>Software Engineering is a professional discipline requiring rigorous ethics.</p>
+                <ul>
+                    <li><span class="highlight">To Users:</span> Ensuring 100% data fidelity.</li>
+                    <li><span class="highlight">To Society:</span> Preventing misinformation via bad transcription.</li>
+                    <li><span class="highlight">To Data:</span> Privacy of sensitive scanned documents.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Ethics vs Morals -->
+        <div class="slide">
+            <h2>Ethics vs. Morals</h2>
+            <div class="content">
+                <ul>
+                    <li><span class="highlight">Morals:</span> Personal belief that "AI should be helpful."</li>
+                    <li><span class="highlight">Ethics:</span> Professional standards like "AI must be transparent."
+                    </li>
+                    <li><span class="highlight">Application:</span> Moved from personal convenience to professional
+                        responsibility with Phase 2's QA layer.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: Professional Ethics -->
+        <div class="slide">
+            <h2>Professional Ethics</h2>
+            <div class="content">
+                <ul>
+                    <li><span class="highlight">Code Quality:</span> Modular, readable BaseAgent architecture.</li>
+                    <li><span class="highlight">Security:</span> Isolation of API keys in .env files.</li>
+                    <li><span class="highlight">User Safety:</span> Implementing Human-in-the-Loop controls.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Code of Ethics -->
+        <div class="slide">
+            <h2>ACM / IEEE Code of Ethics</h2>
+            <div class="content">
+                <ul>
+                    <li><span class="highlight">Principle 1.1:</span> Contribute to society and human well-being.</li>
+                    <li><span class="highlight">Principle 2.5:</span> Give comprehensive and thorough evaluations (via
+                        QAReviewer).</li>
+                    <li><span class="highlight">Potential Violation:</span> Privacy risks when using cloud-based VLMs.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: Trends in IT -->
+        <div class="slide">
+            <h2>Trends: Rise of Agentic Systems</h2>
+            <div class="content">
+                <p>The industry is shifting from <span class="highlight">Assistants</span> to <span
+                        class="highlight">Autonomous Agents</span>.</p>
+                <ul>
+                    <li>Neon Digitizer represents the proactive future.</li>
+                    <li>Software that "thinks" about the data it processes.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 19: Technical Limitations -->
+        <div class="slide">
+            <h2>Technical Limitations of Phase 1</h2>
+            <div class="content">
+                <ul>
+                    <li><span class="highlight">Static Logic:</span> Failure in OCR resulted in gibberish.</li>
+                    <li><span class="highlight">No Autonomy:</span> User had to manually fix every mistake.</li>
+                    <li><span class="highlight">No Understanding:</span> It was OCR, not OCU (Understanding).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 23: Agent Architecture -->
+        <div class="slide">
+            <h2>Agent Architecture (The Flow)</h2>
+            <div class="content">
+                <p>Image → <span class="highlight">VisionExtractor</span> → <span class="highlight">QAReviewer</span> →
+                    <span class="highlight">Formatter</span> → <span class="highlight">Word Document</span>
+                </p>
+                <ul>
+                    <li>Feedback loops for autonomous error correction.</li>
+                    <li>Self-Correction: Observed fixing "megnatic" to "magnetic".</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 32: Comparative Analysis -->
+        <div class="slide">
+            <h2>Phase 1 vs. Agentic Version</h2>
+            <div class="content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Phase 1 (Traditional)</th>
+                            <th>Phase 2 (Agentic)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Control</td>
+                            <td>User-driven</td>
+                            <td>System-driven</td>
+                        </tr>
+                        <tr>
+                            <td>Intelligence</td>
+                            <td>Static Pattern</td>
+                            <td>Adaptive Cognitive</td>
+                        </tr>
+                        <tr>
+                            <td>Behavior</td>
+                            <td>Reactive</td>
+                            <td>Proactive</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Final Slide -->
+        <div class="slide title-slide">
+            <h1>THANK YOU</h1>
+            <p class="tagline">Q&A | Neon Agentic Digitizer</p>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <button class="btn" id="prev-btn">←</button>
+        <button class="btn" id="next-btn">→</button>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress-bar');
+        const slideNum = document.getElementById('current-slide-num');
+        let currentSlide = 0;
+
+        function updatePresentation() {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+                if (index === currentSlide) slide.classList.add('active');
+            });
+
+            const percent = ((currentSlide + 1) / slides.length) * 100;
+            progressBar.style.width = percent + '%';
+            slideNum.innerText = `${String(currentSlide + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+        }
+
+        document.getElementById('next-btn').addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updatePresentation();
+            }
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updatePresentation();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') document.getElementById('next-btn').click();
+            if (e.key === 'ArrowLeft') document.getElementById('prev-btn').click();
+        });
+
+        updatePresentation();
+    </script>
+</body>
+
+</html>

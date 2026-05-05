@@ -1,0 +1,10 @@
+gradio
+paddleocr
+paddlepaddle
+pytesseract
+python-docx
+opencv-python
+Pillow
+python-dotenv
+openai
+pyspellchecker

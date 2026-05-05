@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.pyc
+*.png
+*.docx
+*.jpg
+temp_*
+web_in_*
+.gradio/
+venv/
+.DS_Store
